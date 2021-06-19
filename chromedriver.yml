@@ -1,0 +1,45 @@
+---
+
+- hosts: webserver
+  become: true
+  tasks:
+  - name: Install Git
+    package:
+     name: git
+     state: present
+
+  - name: Run update
+    apt:
+     update_cache: true
+
+  - name: Install jdk
+    package:
+     name: openjdk-8-jdk
+     state: present
+
+  - name: Download Chrome browser
+    command: wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+
+  - name: Install Chrome Browser
+    command: apt install ./google-chrome-stable_current_amd64.deb -y
+
+  - name: Run update
+    apt:
+     update_cache: yes
+
+  - name: download chromedriver
+    command: wget https://chromedriver.storage.googleapis.com/90.0.4430.24/chromedriver_linux64.zip
+
+  - name: install unzip
+    command: apt install unzip
+
+  - name: unzip chromedriver
+    command: unzip chromedriver_linux64.zip
+
+  - name: add ubuntu user
+    user:
+      name: ubuntu
+      shell: /bin/bash
+
+  - name: move chromedriver
+    command: mv chromedriver /home/ubuntu/
