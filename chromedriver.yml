@@ -30,8 +30,12 @@
   - name: download chromedriver
     command: wget https://chromedriver.storage.googleapis.com/90.0.4430.24/chromedriver_linux64.zip
 
-  - name: install unzip
-    command: apt install unzip
+  - name: Install unzip
+    apt:
+      name: unzip
+      state: present
+      update_cache: yes
+
 
   - name: unzip chromedriver
     command: unzip chromedriver_linux64.zip

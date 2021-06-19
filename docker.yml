@@ -2,12 +2,34 @@
 - hosts: webserver
   become: true
   tasks:
+
+  - name: Set authorized key taken from file
+    authorized_key:
+      user: root
+      state: present
+      key: "{{ lookup('file', '/root/.ssh/id_rsa.pub') }}"
+
+  - name: ping host
+    ping:
+    register: ping_pong
+
+  - name: Install gpg
+    apt:
+      name: gpg
+      state: present
+      update_cache: yes
+    when: ping_pong
+    register: gpg_installed
+
   - name: Add Docker GPG key
     apt_key: url=https://download.docker.com/linux/ubuntu/gpg
+    when: gpg_installed
+    register: docker_key
 
   - name: Add Docker APT repository
     apt_repository:
       repo: deb https://download.docker.com/linux/ubuntu {{ansible_distribution_release}} stable
+    when: docker_key
 
   - name: Install list of packages
     apt:
