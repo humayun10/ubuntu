@@ -1,8 +1,8 @@
 ---
 
-- hosts: 192.168.1.186
+- hosts: 192.168.1.159
   vars:
-   - ip_address: '192.168.1.63'
+   - ip_address: '192.168.1.64'
   become: true
 
   tasks:
